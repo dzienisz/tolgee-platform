@@ -1,7 +1,7 @@
 import { Box, Button, styled, SxProps } from '@mui/material';
 import { useTranslate } from '@tolgee/react';
 import { Stars } from 'tg.component/CustomIcons';
-import { usePosthog } from 'tg.hooks/usePosthog';
+import { usePostHog } from 'posthog-js/react';
 import { useProjectPermissions } from 'tg.hooks/useProjectPermissions';
 import { usePromptUrlState } from 'tg.views/projects/translations/useUrlPromptState';
 
@@ -51,7 +51,7 @@ export const MachineTranslationPromptWrapper = ({
   const { setAiPlayground, setOpenPrompt } = usePromptUrlState();
   const { satisfiesPermission } = useProjectPermissions();
 
-  const ph = usePosthog();
+  const ph = usePostHog();
 
   const { t } = useTranslate();
   return (

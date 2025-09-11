@@ -20,6 +20,8 @@ import { GlobalLoading, LoadingProvider } from 'tg.component/GlobalLoading';
 import { GlobalErrorModal } from 'tg.component/GlobalErrorModal';
 import { BottomPanelProvider } from 'tg.component/bottomPanel/BottomPanelContext';
 import { GlobalContext } from 'tg.globalContext/GlobalContext';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 import { App } from './component/App';
 import ErrorBoundary from './component/ErrorBoundary';
 import { FullPageLoading } from './component/common/FullPageLoading';
@@ -30,6 +32,14 @@ import { MuiLocalizationProvider } from 'tg.component/MuiLocalizationProvider';
 import { languageStorage, queryClient } from './initialSetup';
 import { GlobalStyles } from './GlobalStyles';
 import { branchName } from './branch.json';
+
+// Initialize PostHog
+if (import.meta.env.VITE_APP_POSTHOG_API_KEY) {
+  posthog.init(import.meta.env.VITE_APP_POSTHOG_API_KEY, {
+    api_host:
+      import.meta.env.VITE_APP_POSTHOG_HOST || 'https://us.i.posthog.com',
+  });
+}
 
 function getFeatureName(branch: string) {
   const parts = branch.split('/');
@@ -84,13 +94,15 @@ const MainWrapper = () => {
                       }}
                     >
                       <GlobalContext>
-                        <BottomPanelProvider>
-                          <GlobalStyles />
-                          <MuiLocalizationProvider>
-                            <App />
-                            <GlobalErrorModal />
-                          </MuiLocalizationProvider>
-                        </BottomPanelProvider>
+                        <PostHogProvider client={posthog}>
+                          <BottomPanelProvider>
+                            <GlobalStyles />
+                            <MuiLocalizationProvider>
+                              <App />
+                              <GlobalErrorModal />
+                            </MuiLocalizationProvider>
+                          </BottomPanelProvider>
+                        </PostHogProvider>
                       </GlobalContext>
                     </SnackbarProvider>
                   </ErrorBoundary>

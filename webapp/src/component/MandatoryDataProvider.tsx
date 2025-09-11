@@ -5,7 +5,6 @@ import { useGlobalLoading } from './GlobalLoading';
 import { useIdentify } from 'tg.hooks/useIdentify';
 import { useIsFetching, useIsMutating } from 'react-query';
 import { useConfig, useUser } from 'tg.globalContext/helpers';
-import { usePosthogInit } from 'tg.hooks/usePosthog';
 import { usePlausible } from 'tg.hooks/plausible';
 import { CustomOptions } from 'tg.service/http/useQueryApi';
 
@@ -44,7 +43,7 @@ export const MandatoryDataProvider = (props: any) => {
     }
   }, [config?.clientSentryDsn]);
 
-  usePosthogInit();
+  // PostHog is now handled by PostHogProvider
   usePlausible();
 
   useEffect(() => {
